@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from collections import deque
-from typing import Callable, Coroutine, List, Tuple, Union, Mapping, NamedTuple
-from typing import Deque
+from typing import Callable, Coroutine, List, Tuple, Union, Mapping
+from intervaltree import IntervalTree
 
 import attr
 
@@ -98,33 +97,62 @@ def atom(var: str) -> MonitorFact:
     return MonitorFact(factory)
 
 
-def to_itvl(time, start, end):
-    raise NotImplementedError
+def _init_tree():
+    tree = IntervalTree()
+    tree.addi(-oo, oo, oo)  # Starts off with -oo signal.
+    return tree
 
 
-@attr.s(frozen=True, auto_attribs=True)
-class MaxIntervalQueue:
-    queue: Deque[Tuple[Time, Robustness]] = attr.ib(factory=deque)
+@attr.s(auto_attribs=True)
+class MinSlidingWindow:
+    tree: IntervalTree = attr.ib(factory=_init_tree)
+    itvl: Tuple[Time, Time] = (0, oo)
+    time: Time = 0
 
-    def peak(self) -> Robustness:
-        return queue[0]
+    def __getitem__(self, t: Time) -> Robustness:
+        itvls = self.tree[t]
+        assert len(itvls) == 1
+        return list(itvls)[0].data
 
-    def pop(self) -> Robustness:
-        return queue.pop()
+    def min(self) -> Robustness:
+        """Returns minimum robustness at the current time."""
+        return self[self.time - self.itvl[0]]
 
-    def push(self, val: Robustness):
-        queue.appendleft(val)
+    def step(self, t: Time) -> Robustness:
+        """Advances time to t."""
+        self.time = t
+
+        if self.itvl[1] != oo:
+            self.tree.chop(-oo, t - self.itvl[1])
+        else:
+            self.tree.chop(-oo, t - self.itvl[0])
+
+
+    def push(self, t: Time, val: Robustness) -> Robustness:
+        """Adds (t, val) to the window without advancing time."""
+        if val > self[t]:
+            return
+        self.tree.chop(t, oo)
+        self.tree.addi(t, oo, val)
+
+    def update(self, t: Time, val: Robustness) -> Robustness:
+        """Performs three actions:
+          1. Push: Adds (t, val) to window.
+          2. Step: Updates time to t.
+          3. Min: Returns the minimum value in the window at time t.
+        """
+        assert t > self.time
+        self.push(t, val)
+        self.step(t)
+        return self.min()
 
         
 def _hist_op_factory(start, end):
     def create_op():
-        queue = MaxIntervalQueue()
+        window = MinSlidingWindow()
 
         def op(time, val):
-            nonlocal queue
-
-            # left, right = to_itvl(time, start, end)
-            # tree.addi(left, right, val)
-
+            nonlocal window
+            return window.update(time, val)
 
     return create_op
