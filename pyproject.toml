@@ -9,7 +9,6 @@ authors = ["Marcell Vazquez-Chanlatte <mvc@linux.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 attrs = "^19.3.0"
-discrete-signals = "^0.7.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

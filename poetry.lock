@@ -70,19 +70,6 @@ version = "5.0.3"
 toml = ["toml"]
 
 [[package]]
-category = "main"
-description = "A domain specific language for modeling and manipulating discrete time signals."
-name = "discrete-signals"
-optional = false
-python-versions = "*"
-version = "0.7.3"
-
-[package.dependencies]
-attrs = ">=18.1.0"
-funcy = "*"
-sortedcontainers = "*"
-
-[[package]]
 category = "dev"
 description = "Discover and load entry points from installed packages."
 name = "entrypoints"
@@ -105,20 +92,12 @@ pycodestyle = ">=2.5.0,<2.6.0"
 pyflakes = ">=2.1.0,<2.2.0"
 
 [[package]]
-category = "main"
-description = "A fancy and practical functional tools"
-name = "funcy"
-optional = false
-python-versions = "*"
-version = "1.14"
-
-[[package]]
 category = "dev"
 description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
 python-versions = ">=3.5.2"
-version = "5.5.1"
+version = "5.5.3"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -275,7 +254,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "1.14.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
 name = "sortedcontainers"
 optional = false
@@ -304,7 +283,7 @@ python-versions = "*"
 version = "0.1.8"
 
 [metadata]
-content-hash = "cba97f62a2b3b4ca2df339cffe1772db6c4f9aeba4d3126befd5866fcca1a7a2"
+content-hash = "8d0cad960598baaf39c077758cd02b6c503e2182b688844f6dc9b93f18689d8f"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -365,9 +344,6 @@ coverage = [
     {file = "coverage-5.0.3-cp39-cp39m-win_amd64.whl", hash = "sha256:da93027835164b8223e8e5af2cf902a4c80ed93cb0909417234f4a9df3bcd9af"},
     {file = "coverage-5.0.3.tar.gz", hash = "sha256:77afca04240c40450c331fa796b3eab6f1e15c5ecf8bf2b8bee9706cd5452fef"},
 ]
-discrete-signals = [
-    {file = "discrete-signals-0.7.3.tar.gz", hash = "sha256:0e6fcf0f7539ea1fe7d8e560d7c8a09923cf842e280217303fe1748c6556599f"},
-]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
     {file = "entrypoints-0.3.tar.gz", hash = "sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"},
@@ -376,12 +352,9 @@ flake8 = [
     {file = "flake8-3.7.9-py2.py3-none-any.whl", hash = "sha256:49356e766643ad15072a789a20915d3c91dc89fd313ccd71802303fd67e4deca"},
     {file = "flake8-3.7.9.tar.gz", hash = "sha256:45681a117ecc81e870cbf1262835ae4af5e7a8b08e40b944a8a6e6b895914cfb"},
 ]
-funcy = [
-    {file = "funcy-1.14.tar.gz", hash = "sha256:75ee84c3b446f92e68a857c2267b15a1b49c631c9d5a87a5f063cd2d6761a5c4"},
-]
 hypothesis = [
-    {file = "hypothesis-5.5.1-py3-none-any.whl", hash = "sha256:f407a5bbcb7578a5e12c7f5b6d6b74dc7118a6df3fb0a774a8efc6576f824dad"},
-    {file = "hypothesis-5.5.1.tar.gz", hash = "sha256:0cd069b14a3374f5bae1a7210bd20211e5f62a50f2884be10192eae2e296b78f"},
+    {file = "hypothesis-5.5.3-py3-none-any.whl", hash = "sha256:6b0ce0655839c1d4446358ed5dc50c0ba50211cb0732a4c5ba6a0094a8047da2"},
+    {file = "hypothesis-5.5.3.tar.gz", hash = "sha256:a1d3fa6a6bec3e446204bfd6ec6abe85834d932cda7f5ab7e1cafbb4eb0170a1"},
 ]
 idna = [
     {file = "idna-2.8-py2.py3-none-any.whl", hash = "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"},
