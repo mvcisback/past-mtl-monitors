@@ -57,9 +57,7 @@ The past-mtl-monitor API centers around the MonitorFactory type with
 atom as the primary entrypoint into the API.
 
 .. autofunction:: past_mtl_monitors.atom
-
 .. autoclass:: past_mtl_monitors.monitors.MonitorFact
-
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__and__
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__or__
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.hist
