@@ -6,7 +6,7 @@ from intervaltree import IntervalTree
 import attr
 
 Time = float
-Robustness = Union[float, bool]
+Robustness = Union[float]
 
 Data = Mapping[str, Robustness]
 Monitor = Coroutine[Tuple[Time, Data], Robustness, Robustness]
@@ -39,15 +39,15 @@ class MonitorFact:
 
     def __and__(self, other: MonitorFact) -> MonitorFact:
         """
-        Combines child monitors using logical AND or MIN depending
-        of Boolean or Real values.
+        Combines child monitors using min. If values are {1, -1} for True 
+        and False resp., then this corresponds to logical And.
         """
         return apply([self, other], lambda _, xs: min(xs))
 
     def __or__(self, other: MonitorFact) -> MonitorFact:
         """
-        Combines child monitors using logical OR or MAX depending
-        of Boolean or Real values.
+        Combines child monitors using min. If values are {1, -1} for True 
+        and False resp., then this corresponds to logical Or.
         """
         return apply([self, other], lambda _, xs: max(xs))
 
@@ -56,7 +56,7 @@ class MonitorFact:
         def op(_, vals):
             assert len(vals) == 1
             val = vals[0]
-            return not val if isinstance(val, bool) else -val
+            return -val
         return apply([self], op)
 
     def hist(self, start=0, end=oo) -> MonitorFact:
@@ -64,7 +64,16 @@ class MonitorFact:
         Monitors if the child monitor was historically true over the
         interval.
         """
-        raise NotImplementedError
+        def factory():
+            window = MinSlidingWindow(itvl=(start, end))
+            child_monitor = self.monitor()
+
+            time, child_input = yield
+            while True:
+                val = child_monitor.send((time, child_input))
+                time, child_input = yield window.update(time, val)
+                
+        return MonitorFact(factory)
 
     def once(self, start=0, end=oo) -> MonitorFact:
         """
@@ -75,10 +84,23 @@ class MonitorFact:
 
     def since(self, other: MonitorFact) -> MonitorFact:
         """
-        Monitors if the self's monitor has held since the
-        other was last true (non-inclusive).
+        Monitors the minimum value since the last time
+        other's value was greater than 0.
         """
-        raise NotImplementedError
+        def factory():
+            left, right = self.monitor(), other.monitor()
+
+            closest = oo
+            payload = yield
+            while True:
+                val_l, val_r = left.send(payload), right.send(payload)
+                if val_r > 0:
+                    closest = oo
+                elif val_l < closest:
+                    closest = val_l
+
+                payload = yield closest
+
 
 
 def atom(var: str) -> MonitorFact:
@@ -107,7 +129,7 @@ def _init_tree():
 class MinSlidingWindow:
     tree: IntervalTree = attr.ib(factory=_init_tree)
     itvl: Tuple[Time, Time] = (0, oo)
-    time: Time = 0
+    time: Time = -oo
 
     def __getitem__(self, t: Time) -> Robustness:
         itvls = self.tree[t]
@@ -127,7 +149,6 @@ class MinSlidingWindow:
         else:
             self.tree.chop(-oo, t - self.itvl[0])
 
-
     def push(self, t: Time, val: Robustness) -> Robustness:
         """Adds (t, val) to the window without advancing time."""
         if val > self[t]:
@@ -145,14 +166,3 @@ class MinSlidingWindow:
         self.push(t, val)
         self.step(t)
         return self.min()
-
-        
-def _hist_op_factory(start, end):
-    def create_op():
-        window = MinSlidingWindow()
-
-        def op(time, val):
-            nonlocal window
-            return window.update(time, val)
-
-    return create_op
