@@ -64,7 +64,6 @@ atom as the primary entrypoint into the API.
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.once
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.since
 
-
 Extending
 ---------
 
