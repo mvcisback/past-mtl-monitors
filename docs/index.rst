@@ -28,21 +28,18 @@ atom as the primary entrypoint into the API.
 
 .. autofunction:: past_mtl_monitors.atom
 
-
 .. autoclass:: past_mtl_monitors.monitors.MonitorFact
 
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__and__
-
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__or__
-
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.hist
-
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.once
-
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.since
 
+
 Extending
-=========
+---------
+
 The `MonitorFact` type is a simple wrapper around python
 co-routines. This makes is easy to write your own monitors that
 integrate well with the `past-mtl-monitor` library. For example:
@@ -70,7 +67,7 @@ results::
               total += prev_val * (time - prev_time)
               prev_val = child_val
 
-      return MonitorFact(avg_factory)
+      return MonitorFact(avg)
 
 
 Indices and tables
