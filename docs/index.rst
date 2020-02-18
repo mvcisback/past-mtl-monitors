@@ -28,12 +28,17 @@ atom as the primary entrypoint into the API.
 
 .. autofunction:: past_mtl_monitors.atom
 
+
 .. autoclass:: past_mtl_monitors.monitors.MonitorFact
 
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__and__
+
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__or__
+
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.hist
+
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.once
+
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.since
 
 Extending
