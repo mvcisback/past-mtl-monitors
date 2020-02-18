@@ -39,25 +39,29 @@ class MonitorFact:
 
     def __and__(self, other: MonitorFact) -> MonitorFact:
         """
-        Combines child monitors using min. If values are {1, -1} for True 
+        Combines child monitors using min. If values are {1, -1} for True
         and False resp., then this corresponds to logical And.
         """
         return apply([self, other], lambda _, xs: min(xs))
 
     def __or__(self, other: MonitorFact) -> MonitorFact:
         """
-        Combines child monitors using min. If values are {1, -1} for True 
+        Combines child monitors using min. If values are {1, -1} for True
         and False resp., then this corresponds to logical Or.
         """
         return apply([self, other], lambda _, xs: max(xs))
 
-    def __invert__(self) -> MonitorFact:
-        """Inverts result of child monitors."""
+    def __neg__(self) -> MonitorFact:
+        """Negates result of child monitors."""
         def op(_, vals):
             assert len(vals) == 1
-            val = vals[0]
-            return -val
+            return -vals[0]
+
         return apply([self], op)
+
+    def __invert__(self) -> MonitorFact:
+        """Negates result of child monitors."""
+        return -self
 
     def hist(self, start=0, end=oo) -> MonitorFact:
         """
@@ -72,7 +76,7 @@ class MonitorFact:
             while True:
                 val = child_monitor.send((time, child_input))
                 time, child_input = yield window.update(time, val)
-                
+
         return MonitorFact(factory)
 
     def once(self, start=0, end=oo) -> MonitorFact:
@@ -100,7 +104,6 @@ class MonitorFact:
                     closest = val_l
 
                 payload = yield closest
-
 
 
 def atom(var: str) -> MonitorFact:

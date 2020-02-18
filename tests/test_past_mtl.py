@@ -33,10 +33,9 @@ def test_neg(vals):
         assert monitor2.send((i, {'x': val})) == val
 
 
-
 @given(st.lists(st.tuples(Booleans, Booleans), min_size=1))
 def test_and(vals):
-    x, y = map(atom, ['x','y'])
+    x, y = map(atom, ['x', 'y'])
     vals = [{'x': x, 'y': y} for x, y in vals]
 
     x_and_y = (x & y).monitor()
@@ -46,7 +45,7 @@ def test_and(vals):
 
 @given(st.lists(st.tuples(Booleans, Booleans), min_size=1))
 def test_or(vals):
-    x, y = map(atom, ['x','y'])
+    x, y = map(atom, ['x', 'y'])
     vals = [{'x': x, 'y': y} for x, y in vals]
 
     x_or_y = (x | y).monitor()
@@ -97,7 +96,20 @@ def test_hist_once_no_horizon(vals):
     ox = atom('x').once().monitor()
     vals = [{'x': x} for x in vals]
 
-    prevh, prevo = True, False
+    prevh, prevo = 1, -1
+    for i, val in enumerate(vals):
+        prevh, prevo = min(val['x'], prevh), max(val['x'], prevo)
+        assert hx.send((i, val)) == prevh
+        assert ox.send((i, val)) == prevo
+
+
+@given(st.lists(Booleans, min_size=1))
+def test_since(vals):
+    hx = atom('x').hist().monitor()
+    ox = atom('x').once().monitor()
+    vals = [{'x': x} for x in vals]
+
+    prevh, prevo = 1, -1
     for i, val in enumerate(vals):
         prevh, prevo = min(val['x'], prevh), max(val['x'], prevo)
         assert hx.send((i, val)) == prevh
