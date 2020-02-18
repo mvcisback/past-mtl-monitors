@@ -63,10 +63,18 @@ class MonitorFact:
         """Negates result of child monitors."""
         return -self
 
+    def implies(self, other: MonitorFact) -> MonitorFact:
+        """Monitors if child monitor self implies child monitor other."""
+        return (~self) | other
+
+    def __eq__(self, other: MonitorFact) -> MonitorFact:
+        """Monitors if child monitors self and other return same values."""
+        return self.implies(other) & other.implies(self)
+
     def hist(self, start=0, end=oo) -> MonitorFact:
         """
         Monitors if the child monitor was historically true over the
-        interval.
+        interval [t-end, t-start] where t is the current time.
         """
         def factory():
             window = MinSlidingWindow(itvl=(start, end))
@@ -82,7 +90,7 @@ class MonitorFact:
     def once(self, start=0, end=oo) -> MonitorFact:
         """
         Monitors if the child monitor was once true in the
-        interval.
+        interval [t-end, t-start] where t is the current time.
         """
         return ~((~self).hist(start, end))
 
@@ -90,6 +98,9 @@ class MonitorFact:
         """
         Monitors the minimum value since the last time
         other's value was greater than 0.
+
+        Note: other's value is assumed to have been previously
+        greater than zero when the monitor starts.
         """
         def factory():
             left, right = self.monitor(), other.monitor()
@@ -104,6 +115,8 @@ class MonitorFact:
                     closest = val_l
 
                 payload = yield closest
+
+        return MonitorFact(factory)
 
 
 def atom(var: str) -> MonitorFact:

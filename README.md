@@ -32,3 +32,11 @@ run:
 `$ poetry install`
 
 # Usage
+
+```python
+from past_mtl_monitors import atom
+
+x, y, z = atom('x'), atom('y'), atom('z')
+
+monitor = (x == y).hist() & 
+```

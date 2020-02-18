@@ -55,6 +55,17 @@ def test_or(vals):
         assert x_or_y.send((i, val)) == x_or_y2.send((i, val))
 
 
+@given(st.lists(st.tuples(Booleans, Booleans), min_size=1))
+def test_eq(vals):
+    x, y = map(atom, ['x', 'y'])
+    vals = [{'x': x, 'y': y} for x, y in vals]
+
+    x_eq_y = (x == y).monitor()
+
+    for i, val in enumerate(vals):
+        assert x_eq_y.send((i, val)) == 2*int(val['x'] == val['y']) - 1
+
+
 def test_min_window():
     window = MinSlidingWindow()
 
@@ -103,14 +114,14 @@ def test_hist_once_no_horizon(vals):
         assert ox.send((i, val)) == prevo
 
 
-@given(st.lists(Booleans, min_size=1))
-def test_since(vals):
-    hx = atom('x').hist().monitor()
-    ox = atom('x').once().monitor()
-    vals = [{'x': x} for x in vals]
+def test_since():
+    monitor = atom('x').since(atom('y')).monitor()
+    vals = [
+        {'x': 1, 'y': -1}, {'x': -100, 'y': 1},
+        {'x': 1, 'y': -1}, {'x': 2, 'y': -1}
+    ]
 
-    prevh, prevo = 1, -1
-    for i, val in enumerate(vals):
-        prevh, prevo = min(val['x'], prevh), max(val['x'], prevo)
-        assert hx.send((i, val)) == prevh
-        assert ox.send((i, val)) == prevo
+    expect = [1, oo, 1, 1]
+
+    for t, (v, e) in enumerate(zip(vals, expect)):
+        assert monitor.send((t, v)) == e
