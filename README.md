@@ -33,10 +33,28 @@ run:
 
 # Usage
 
+The primary entry point to the `past-mtl-monitors` package is the
+`atom` function.
+
+Note that robustness values are computed, and thus if one would like
+the Boolean semantics, use `1` for `True` and `-1` for `False`.
+
 ```python
 from past_mtl_monitors import atom
 
 x, y, z = atom('x'), atom('y'), atom('z')
 
-monitor = (x == y).hist() & 
+# Monitor that historically, x has been equal to y.
+monitor = (x == y).hist().monitor()
+
+#                    time    values
+assert monitor.send((0,     {'x': 1, 'y': 1}))
+
+
+assert not monitor.send((0, {'x': 1, 'y': -1}))
+assert not monitor.send((0, {'x': 1, 'y': 1}))
+
+# Monitor that x & y have been true since the last
+# time that z held for 3 time units.
+monitor2 = (x & y).since(z.hist(0, 3)).monitor()
 ```
