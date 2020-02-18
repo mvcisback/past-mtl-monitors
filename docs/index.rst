@@ -10,6 +10,9 @@ past-mtl-monitors
    :maxdepth: 2
    :caption: Contents:
 
+A library for creating past metric temporal logic monitors.
+
+
 Example Usage::
 
    from past_mtl_monitors import atom
@@ -32,6 +35,37 @@ atom as the primary entrypoint into the API.
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.hist
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.once
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.since
+
+Extending
+=========
+The `MonitorFact` type is a simple wrapper around python
+co-routines. This makes is easy to write your own monitors that
+integrate well with the `past-mtl-monitor` library. For example:
+consider the following monitor which aggregates the child's monitor's
+results::
+
+  from past_mtl_monitors import MonitorFact
+
+
+  def aggregate_monitor(child_factory):
+      """Sums the child values using piecewise constant interpolation."""
+
+      def avg_factory():
+          child_monitor = child_factory.monitor()
+          payload = (time, _) = yield    # Get initial payload.
+                                         # payload = (time, child input).
+
+          total = prev_val = 0
+          while True:
+              child_val = child_monitor.send(payload)
+
+              prev_time = time
+              payload = (time, _) = yield total
+              
+              total += prev_val * (time - prev_time)
+              prev_val = child_val
+
+      return MonitorFact
 
 
 Indices and tables
