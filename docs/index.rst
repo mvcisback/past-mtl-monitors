@@ -13,12 +13,28 @@ past-mtl-monitors
 A library for creating past metric temporal logic monitors.
 
 
-Example Usage::
+Basic Usage::
 
-   from past_mtl_monitors import atom
-   
-   x, y = atom('x'), atom('y')
-   monitor = (x & ~y.hist()).monitor()
+  from past_mtl_monitors import atom
+
+  x, y, z = atom('x'), atom('y'), atom('z')
+
+  # Monitor that historically, x has been equal to y.
+  monitor = (x == y).hist().monitor()
+
+  #                    time         values
+  assert monitor.send((0    , {'x': 1, 'y': 1}))  ==  1   # sat
+  assert monitor.send((1.1  , {'x': 1, 'y': -1})) == -1   # unsat
+  assert monitor.send((1.5  , {'x': 1, 'y': 1}))  == -1   # unsat
+
+  monitor2 = x.once().monitor()  # Monitor's x's maximum value.
+  assert monitor2.send((0 , {'x': -10, 'y': 1})) == -10
+  assert monitor2.send((0 , {'x': 100, 'y': 2})) == 100
+  assert monitor2.send((0 , {'x': -100, 'y': -1})) == 100
+
+  # Monitor that x & y have been true since the last
+  # time that z held for 3 time units.
+  monitor3 = (x & y).since(z.hist(0, 3)).monitor()
 
 API
 ---

@@ -35,10 +35,20 @@ run:
 # Usage
 
 The primary entry point to the `past-mtl-monitors` package is the
-`atom` function.
+`atom` function. This exposes a monitor factory which can be combined
+with other monitor factories to create complex property monitors.
 
-Note that robustness values are computed, and thus if one would like
-the Boolean semantics, use `1` for `True` and `-1` for `False`.
+Under the hood, these monitor factories are just wrappers around
+python coroutines that expect a `(time, val)` pair, where time is a
+`float` and `val` is a mapping from strings to robustness values
+(`float`).
+
+**Note** `past-mtl-monitors` only implements a quantitative semantics
+where a value greater than 0 implies sat and a value less than 0
+implies unsat.
+
+Thus if one would like to use Boolean semantics, use `1` for `True` and
+`-1` for `False`.
 
 ```python
 from past_mtl_monitors import atom
@@ -48,14 +58,17 @@ x, y, z = atom('x'), atom('y'), atom('z')
 # Monitor that historically, x has been equal to y.
 monitor = (x == y).hist().monitor()
 
-#                    time    values
-assert monitor.send((0,     {'x': 1, 'y': 1}))
+#                    time         values
+assert monitor.send((0    , {'x': 1, 'y': 1}))  ==  1   # sat
+assert monitor.send((1.1  , {'x': 1, 'y': -1})) == -1   # unsat
+assert monitor.send((1.5  , {'x': 1, 'y': 1}))  == -1   # unsat
 
-
-assert not monitor.send((0, {'x': 1, 'y': -1}))
-assert not monitor.send((0, {'x': 1, 'y': 1}))
+monitor2 = x.once().monitor()  # Monitor's x's maximum value.
+assert monitor2.send((0 , {'x': -10, 'y': 1})) == -10
+assert monitor2.send((0 , {'x': 100, 'y': 2})) == 100
+assert monitor2.send((0 , {'x': -100, 'y': -1})) == 100
 
 # Monitor that x & y have been true since the last
 # time that z held for 3 time units.
-monitor2 = (x & y).since(z.hist(0, 3)).monitor()
+monitor3 = (x & y).since(z.hist(0, 3)).monitor()
 ```
