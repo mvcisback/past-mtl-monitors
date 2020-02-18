@@ -65,7 +65,7 @@ results::
               total += prev_val * (time - prev_time)
               prev_val = child_val
 
-      return MonitorFact
+      return MonitorFact(avg_factory)
 
 
 Indices and tables
