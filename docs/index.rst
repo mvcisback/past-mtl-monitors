@@ -36,6 +36,20 @@ Basic Usage::
   # time that z held for 3 time units.
   monitor3 = (x & y).since(z.hist(0, 3)).monitor()
 
+Installation
+------------
+
+If you just need to use `past-mtl-monitors`, you can just run::
+
+ $ pip install past-mtl-monitors
+
+For developers, note that this project uses the
+[poetry](https://poetry.eustace.io/) python package/dependency
+management tool. Please familarize yourself with it and then
+run::
+
+ $ poetry install
+
 API
 ---
 
@@ -43,6 +57,7 @@ The past-mtl-monitor API centers around the MonitorFactory type with
 atom as the primary entrypoint into the API.
 
 .. autofunction:: past_mtl_monitors.atom
+
 .. autoclass:: past_mtl_monitors.monitors.MonitorFact
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__and__
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.__or__
@@ -50,19 +65,6 @@ atom as the primary entrypoint into the API.
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.once
    .. automethod:: past_mtl_monitors.monitors.MonitorFact.since
 
-Installation
-------------
-
-If you just need to use `past-mtl-monitors`, you can just run::
-
-  $ pip install past-mtl-monitors
-
-For developers, note that this project uses the
-[poetry](https://poetry.eustace.io/) python package/dependency
-management tool. Please familarize yourself with it and then
-run::
-
-  $ poetry install
 
 Extending
 ---------
