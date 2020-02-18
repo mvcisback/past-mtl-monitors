@@ -416,6 +416,17 @@ type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
 category = "dev"
+description = "Read the Docs theme for Sphinx"
+name = "sphinx-rtd-theme"
+optional = false
+python-versions = "*"
+version = "0.4.3"
+
+[package.dependencies]
+sphinx = "*"
+
+[[package]]
+category = "dev"
 description = ""
 name = "sphinxcontrib-applehelp"
 optional = false
@@ -502,7 +513,7 @@ python-versions = "*"
 version = "0.1.8"
 
 [metadata]
-content-hash = "07abf0c08e074733175af7630794bfcd9e1984d374ad23e360ef38c68dd974a9"
+content-hash = "deb7d33d588451cfdf2ece39f8324940fbb5e9da33a373e4f105627bc576e64f"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -712,6 +723,10 @@ sphinx = [
 sphinx-autodoc-typehints = [
     {file = "sphinx-autodoc-typehints-1.10.3.tar.gz", hash = "sha256:a6b3180167479aca2c4d1ed3b5cb044a70a76cccd6b38662d39288ebd9f0dff0"},
     {file = "sphinx_autodoc_typehints-1.10.3-py3-none-any.whl", hash = "sha256:27c9e6ef4f4451766ab8d08b2d8520933b97beb21c913f3df9ab2e59b56e6c6c"},
+]
+sphinx-rtd-theme = [
+    {file = "sphinx_rtd_theme-0.4.3-py2.py3-none-any.whl", hash = "sha256:00cf895504a7895ee433807c62094cf1e95f065843bf3acd17037c3e9a2becd4"},
+    {file = "sphinx_rtd_theme-0.4.3.tar.gz", hash = "sha256:728607e34d60456d736cc7991fd236afb828b21b82f956c5ea75f94c8414040a"},
 ]
 sphinxcontrib-applehelp = [
     {file = "sphinxcontrib-applehelp-1.0.1.tar.gz", hash = "sha256:edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897"},
