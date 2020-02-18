@@ -3,6 +3,7 @@ Past MTL Monitors
 A library for creating past metric temporal logic monitors.
 
 [![Build Status](https://cloud.drone.io/api/badges/mvcisback/past-mtl-monitors/status.svg)](https://cloud.drone.io/mvcisback/past-mtl-monitors)
+[![Documentation Status](https://readthedocs.org/projects/past-mtl-monitors/badge/?version=latest)](https://past-mtl-monitors.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/mvcisback/past-mtl-monitors/branch/master/graph/badge.svg)](https://codecov.io/gh/mvcisback/past-mtl-monitors)
 [![PyPI version](https://badge.fury.io/py/past-mtl-monitors.svg)](https://badge.fury.io/py/past-mtl-monitors)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
