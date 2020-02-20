@@ -59,13 +59,21 @@ atom as the primary entrypoint into the API.
 .. autofunction:: past_mtl_monitors.atom
 
 .. autoclass:: past_mtl_monitors.MonitorFact
+
    .. automethod:: past_mtl_monitors.MonitorFact.hist
+
    .. automethod:: past_mtl_monitors.MonitorFact.once
+
    .. automethod:: past_mtl_monitors.MonitorFact.since
+
    .. automethod:: past_mtl_monitors.MonitorFact.implies
+
    .. automethod:: past_mtl_monitors.MonitorFact.__and__
+
    .. automethod:: past_mtl_monitors.MonitorFact.__or__
+
    .. automethod:: past_mtl_monitors.MonitorFact.__invert__
+
    .. automethod:: past_mtl_monitors.MonitorFact.__eq__
 
 
